@@ -1,0 +1,83 @@
+---
+title: "LiveSessionUnit5Assignment"
+author: "IramB"
+date: "December 2, 2017"
+output: html_document
+---
+
+## import the .txt file into R.  Assign the resulting data frame to an object, df, that consists of three columns with humanreadable column names for each 
+```{r}
+df <- read.table("C:/Users/DataScience/Documents/SMU/Data_Science/Unit_5/HW/yob2016.txt", sep=';')
+colnames(df) <- c("Name","Gender","Amount of Children")
+
+```
+
+## Display the summary and structure of df 
+```{r}
+summary(df)
+str(df)
+
+```
+
+## One name was entered twice and misspelled
+```{r}
+misspelled <- grep("yyy$", df$Name, value = TRUE)
+misspelled
+```
+
+## please remove this misspelled name.  Save the remaining dataset as an object: y2016  
+```{r}
+ind <- which(with(df, (Name==misspelled)))
+y2016 <- df[-ind, ]
+```
+
+## import the .txt file into R. 
+```{r}
+y2015 <- read.table("C:/Users/DataScience/Documents/SMU/Data_Science/Unit_5/HW/yob2015.txt", sep=',')
+colnames(y2015) <- c("Name", "Gender", "Amount of Children")
+```
+
+##  Display the last ten rows in the dataframe. Describe Something interesting. It was interesting to see all names begin with the letter Z, all children were male and there were 5 children each with the name
+```{r}
+y2015[c((nrow(y2015) - 10): nrow(y2015)),]
+```
+Data is sorted by Name.
+
+
+## Merge y2016 and y2015 by your Name column; assign it to final
+```{r}
+final <- merge(y2015, y2016, by=c('Name', 'Gender'))
+names(final) <- c('Name', 'Gender', 'Count2015', 'Count2016')
+```
+
+
+## Create a new column called "Total" in final that adds the amount of children in 2015 and 2016 together. 
+```{r}
+final$Total <- final$Count2015 + final$Count2016
+```
+## In those two years combined, 7239231 people were given popular names 
+```{r}
+sum(final$Total)
+```
+## Sort the data by Total.  What are the top 10 most popular names
+```{r}
+final <- final[order(final$Total, decreasing=TRUE),]
+final$Name[c(1: 10)]
+```
+
+##  Omit boys and give the top 10 most popular girl's names. Assign this to object girl
+```{r}
+males <- final$Gender=='M'
+finalfemales <- final[!males,]
+girl <- final[final$Gender == 'F', 'Name'][c(1: 10)]
+
+```
+
+## Write these top 10 girl Names and their Totals to a CSV file called itsagirl.csv. 
+```{r}
+
+itsagirl <- data.frame(Name=girl, Total=final[final$Gender == 'F', 'Total'][c(1: 10)])
+write.csv(itsagirl, 'itsagirl.csv', row.names=FALSE)
+```
+
+
