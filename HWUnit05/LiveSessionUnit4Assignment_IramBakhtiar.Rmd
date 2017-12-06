@@ -1,0 +1,43 @@
+---
+title: "LiveAssignment04IB"
+author: "IramB"
+date: "November 18, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r echo=TRUE}
+#1a. Install 538 Package
+#install.packages("fivethirtyeight")
+library(fivethirtyeight)
+
+#1b.
+df <- college_recent_grads
+
+#1c. Use a more detailed list of the data sets to write out the URL in a comment to the related news story.
+# vignette("college_recent_grads", package="fivethirtyeight")
+# "college_recent_grads" is the 18th data set in the package "fivethirtyeight." The URL for the news story that includes the raw data is: http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+#1d. Using R command(s), give the dimensions and column names of this data frame.
+dim(df) 
+colnames(df) 
+ncol(df)
+
+
+#2b.Generate a count of each unique major_category in the data frame 
+
+major_count <- table(df$major_category)
+major_count
+
+#2c. barplot of major_count.
+par(las=2)
+barplot(major_count, col="Blue", xlab= "Count", ylab= "Majors", horiz = TRUE, main="Count of Majors") 
+
+
+
+#2d. Write the fivethirtyeight data to a csv file
+write.csv(df, file="fivethirtyeight.csv", row.names=FALSE)
+
+```
